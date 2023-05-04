@@ -3,6 +3,12 @@
 # ubuntu 16.04 LTS cmake version 3.5.1	
 cmake_minimum_required(VERSION 2.8.3)
 
+
+if (APPLE)
+  set(CMAKE_OSX_ARCHITECTURES x86_64;arm64)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET 11.0)
+endif()
+
 project(usb)
 
   set(LIBUSB_C
@@ -24,9 +30,9 @@ if(WIN32)
   )
 elseif (APPLE)
   LIST(APPEND LIBUSB_C
-  libusb/os/poll_posix.c
-  libusb/os/threads_posix.c
   libusb/os/darwin_usb.c
+  libusb/os/events_posix.c
+  libusb/os/threads_posix.c
   )
 elseif(ANDROID)
   LIST(APPEND LIBUSB_C

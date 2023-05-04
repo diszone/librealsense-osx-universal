@@ -5,8 +5,8 @@ ExternalProject_Add(
 
     # Work-around for libusb master broken on Nov 26' 2020 with introduction of v1.0.24
     # the issue has been reported in https://github.com/libusb/libusb/issues/812
-    GIT_REPOSITORY "https://github.com/ev-mp/libusb.git"
-    GIT_TAG "2a7372db54094a406a755f0b8548b614ba8c78ec" # "v1.0.22" + Mac get_device_list hang fix
+    GIT_REPOSITORY "https://github.com/libusb/libusb.git"
+    GIT_TAG "v1.0.26" # "v1.0.26" 
 
     UPDATE_COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/third-party/libusb/CMakeLists.txt
@@ -32,5 +32,6 @@ set(USE_EXTERNAL_USB ON) # INTERFACE libraries can't have real deps, so targets 
 if (APPLE)
   find_library(corefoundation_lib CoreFoundation)
   find_library(iokit_lib IOKit)
-  target_link_libraries(usb INTERFACE objc ${corefoundation_lib} ${iokit_lib})
+  find_library(security_lib Security)
+  target_link_libraries(usb INTERFACE objc ${corefoundation_lib} ${iokit_lib} ${security_lib})
 endif()

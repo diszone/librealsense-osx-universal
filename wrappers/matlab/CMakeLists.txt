@@ -3,24 +3,33 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(RealsenseMatlabWrappers)
 
+
+
 find_package(Matlab COMPONENTS MX_LIBRARY MAT_LIBRARY REQUIRED)
 set(DEPENDENCIES realsense2 ${Matlab_MAT_LIBRARY})
 # Workaround for https://github.com/IntelRealSense/librealsense/pull/3611/files CMAKE_DEBUG_SUFFIX
 # With MSVC2017 the realsense2 dependency without the suffix is still added to the debug build
 # via the /DEFAULTLIB:realsense2.lib entry
 # A similar report exist dated in 2011 https://cmake.org/pipermail/cmake/2011-April/043808.html
-SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} " /NODEFAULTLIB:realsense2" )
+
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    set(CMAKE_INSTALL_RPATH "@loader_path;.;./lib;../lib")
+    set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS})
+else()
+    set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} " /NODEFAULTLIB:realsense2" )
+endif()
 
 set(MATLAB_CPP librealsense_mex.cpp Factory.cpp)
 set(MATLAB_H Factory.h MatlabParamParser.h rs2_type_traits.h types.h)
 set(MATLAB_M align.m camera_info.m colorizer.m config.m context.m
              decimation_filter.m depth_frame.m depth_sensor.m
              depth_stereo_sensor.m device.m device_hub.m disparity_frame.m
-             disparity_transform.m filter.m format.m frame.m 
+             disparity_transform.m filter.m format.m frame.m
              frame_metadata_value.m frame_queue.m frameset.m hole_filling_filter.m
              motion_frame.m motion_stream_profile.m option.m options.m pipeline.m
              pipeline_profile.m playback.m playback_status.m pointcloud.m points.m
-             pose_frame.m recorder.m roi_sensor.m save_single_frameset.m 
+             pose_frame.m recorder.m roi_sensor.m save_single_frameset.m
              save_to_ply.m sensor.m spatial_filter.m stream.m stream_profile.m
              syncer.m temporal_filter.m timestamp_domain.m video_frame.m
              video_stream_profile.m

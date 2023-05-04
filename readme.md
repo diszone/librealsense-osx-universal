@@ -3,6 +3,27 @@
 -----------------
 [![GitHub CI](../../actions/workflows/buildsCI.yaml/badge.svg?branch=development)](../../actions/workflows/buildsCI.yaml)
 
+## NOTE!
+It is a fixed version to support univerasl binaries for macOS. You can generate XCode project for universal binaries by:
+
+```shell
+mkdir build
+cd build
+
+cmake .. \
+-DCMAKE_BUILD_TYPE=Release \
+-DBUILD_EXAMPLES=OFF \
+-DBUILD_TOOLS=ON \
+-DBUILD_WITH_OPENMP=OFF \
+-DHWM_OVER_XU=OFF \
+-DCMAKE_INSTALL_PREFIX=${REALSENSE} \
+-DUSE_EXTERNAL_USB=ON \
+-DBUILD_PYTHON_BINDINGS=ON
+
+make && make install
+```
+
+
 ## Overview
 **Intel® RealSense™ SDK 2.0** is a cross-platform library for Intel® RealSense™ depth cameras (D400 & L500 series and the SR300) and the [T265 tracking camera](./doc/t265.md).
 

@@ -2,6 +2,18 @@
 cmake_minimum_required(VERSION 3.1.0)
 project(librealsense2 LANGUAGES CXX C)
 
+IF (APPLE)
+  set(CMAKE_OSX_ARCHITECTURES x86_64;arm64)
+  set(CMAKE_OSX_DEPLOYMENT_TARGET 11.0)
+  set(CMAKE_INSTALL_RPATH "@executable_path;@loader_path;.;./lib;../lib")
+
+  set (CMAKE_THREAD_LIBS_INIT "-lpthread")
+  set (CMAKE_HAVE_THREADS_LIBRARY 1)
+  set (CMAKE_USE_WIN32_THREADS_INIT 0)
+  set (CMAKE_USE_PTHREADS_INIT 1)
+  set (THREADS_PREFER_PTHREAD_FLAG ON)
+ENDIF ()
+
 # Allow librealsense2 and all of the nested project to include the main repo folder
 set(REPO_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${REPO_ROOT})
