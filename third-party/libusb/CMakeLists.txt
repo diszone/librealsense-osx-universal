@@ -23,9 +23,9 @@ project(usb)
 if(WIN32)
   LIST(APPEND LIBUSB_C
   libusb/os/threads_windows.c
-  libusb/os/poll_windows.c
+  libusb/os/events_windows.c
+  libusb/os/windows_winusb.h
   libusb/os/windows_winusb.c
-  libusb/os/windows_nt_common.c
   libusb/os/windows_usbdk.c
   )
 elseif (APPLE)
